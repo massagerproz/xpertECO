@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useQuery, useMutation } from "convex/react";
+import { FileText, Download, ShieldAlert, FileOutput } from "lucide-react";
 import { api } from "../convex/_generated/api";
 
 export function ReportGenerator() {
@@ -39,12 +40,16 @@ export function ReportGenerator() {
 
     setIsGenerating(true);
     try {
-      const evidenceIds = approvedEvidence.map(ev => ev._id.toString());
+      const evidenceItems = approvedEvidence.map(ev => ({
+        type: ev.type,
+        content: ev.content,
+        sourceReference: ev.sourceReference
+      }));
 
       const response = await fetch("http://localhost:8000/generate_report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ evidence_ids: evidenceIds }),
+        body: JSON.stringify({ evidence_items: evidenceItems }),
       });
 
       if (!response.ok) throw new Error("Failed to generate report");
@@ -93,43 +98,57 @@ export function ReportGenerator() {
   };
 
   return (
-    <div className="p-4 border rounded shadow-sm bg-white mb-6">
-      <h2 className="text-xl font-semibold mb-2">3. Report Draft & QA</h2>
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <FileText className="w-5 h-5 text-slate-400" />
+          <h2 className="text-lg font-semibold text-slate-800">3. Report Draft & QA</h2>
+        </div>
+        <button
+          className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+          onClick={handleGenerateReport}
+          disabled={isGenerating || !approvedEvidence || approvedEvidence.length === 0}
+        >
+          <FileOutput className={`w-4 h-4 ${isGenerating ? 'animate-pulse' : ''}`} />
+          <span>{isGenerating ? "Generating Draft..." : "Generate Report"}</span>
+        </button>
+      </div>
 
-      <button
-        className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 disabled:bg-indigo-300 mb-4"
-        onClick={handleGenerateReport}
-        disabled={isGenerating || !approvedEvidence || approvedEvidence.length === 0}
-      >
-        {isGenerating ? "Generating..." : "Generate Report from Evidence"}
-      </button>
-
-      <div>
-          <h3 className="font-medium text-lg mb-2">Generated Reports</h3>
+      <div className="p-6 bg-slate-50/50">
           {reports === undefined ? (
-              <p>Loading...</p>
+              <div className="animate-pulse flex space-x-4">
+                <div className="h-32 bg-slate-100 rounded w-full"></div>
+              </div>
           ) : reports.length === 0 ? (
-              <p className="text-gray-500 italic">No reports generated yet.</p>
+              <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-xl">
+                <FileText className="w-8 h-8 text-slate-300 mx-auto mb-3" />
+                <p className="text-slate-500">No reports generated yet.</p>
+                <p className="text-slate-400 text-sm mt-1">Approve evidence above and click Generate.</p>
+              </div>
           ) : (
-              <div className="space-y-4">
+              <div className="space-y-6">
                   {reports.map((report) => (
-                      <div key={report._id} className="p-4 border rounded bg-gray-50">
-                          <h4 className="font-bold text-lg">{report.title}</h4>
-                          <p className="mt-2 text-gray-800">{report.body}</p>
+                      <div key={report._id} className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm transition-all hover:shadow-md">
+                          <h4 className="font-bold text-xl text-slate-800 mb-3">{report.title}</h4>
+                          <div className="prose prose-slate prose-sm max-w-none mb-6 text-slate-600">
+                             <p>{report.body}</p>
+                          </div>
 
-                          <div className="mt-4 flex space-x-3">
+                          <div className="pt-4 border-t border-slate-100 flex flex-wrap gap-3">
                               <button
                                   onClick={() => handleRunQA(report._id, report.body)}
                                   disabled={isReviewing}
-                                  className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded hover:bg-purple-200 border border-purple-300"
+                                  className="flex items-center space-x-1.5 text-sm bg-purple-50 text-purple-700 px-4 py-2 rounded-lg hover:bg-purple-100 border border-purple-200 font-medium transition-colors disabled:opacity-50"
                               >
-                                  Run QA Review
+                                  <ShieldAlert className={`w-4 h-4 ${isReviewing ? 'animate-pulse' : ''}`} />
+                                  <span>{isReviewing ? "Running QA..." : "Run AI QA Review"}</span>
                               </button>
                               <button
                                   onClick={() => alert(`Exported: \n\n${report.title}\n\n${report.body}`)}
-                                  className="text-sm bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300 border border-gray-400"
+                                  className="flex items-center space-x-1.5 text-sm bg-white text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 border border-slate-300 font-medium transition-colors"
                               >
-                                  Export Report
+                                  <Download className="w-4 h-4" />
+                                  <span>Export</span>
                               </button>
                           </div>
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
-
 import { useMutation, useQuery } from "convex/react";
+import { Sparkles, MessageSquarePlus, Clock } from "lucide-react";
 import { api } from "../convex/_generated/api";
 
 export function NotesUploader() {
@@ -56,33 +56,51 @@ export function NotesUploader() {
   };
 
   return (
-    <div className="p-4 border rounded shadow-sm bg-white mb-6">
-      <h2 className="text-xl font-semibold mb-2">1. Input Meeting Notes</h2>
-      <textarea
-        className="w-full p-2 border rounded mb-2"
-        rows={4}
-        placeholder="Paste meeting notes, activity updates, etc."
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-      />
-      <button
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
-        onClick={handleExtract}
-        disabled={isExtracting || !notes.trim()}
-      >
-        {isExtracting ? "Extracting..." : "Extract Evidence"}
-      </button>
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="px-6 py-5 border-b border-slate-100 flex items-center space-x-2">
+        <MessageSquarePlus className="w-5 h-5 text-slate-400" />
+        <h2 className="text-lg font-semibold text-slate-800">1. Input Meeting Notes</h2>
+      </div>
 
-      {savedNotes && savedNotes.length > 0 && (
-         <div className="mt-4">
-            <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Recent Notes</h3>
-            <ul className="mt-2 text-sm text-gray-600">
-              {savedNotes.slice(0, 3).map(n => (
-                 <li key={n._id} className="truncate">{n.content}</li>
-              ))}
-            </ul>
-         </div>
-      )}
+      <div className="p-6">
+        <textarea
+          className="w-full p-4 border border-slate-200 rounded-lg mb-4 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none outline-none text-slate-700"
+          rows={5}
+          placeholder="Paste meeting notes, activity updates, emails, or transcripts here..."
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-slate-500">
+            {notes.length} characters
+          </p>
+          <button
+            className="flex items-center space-x-2 bg-slate-900 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            onClick={handleExtract}
+            disabled={isExtracting || !notes.trim()}
+          >
+            <Sparkles className={`w-4 h-4 ${isExtracting ? 'animate-pulse' : ''}`} />
+            <span>{isExtracting ? "Extracting..." : "Extract Evidence"}</span>
+          </button>
+        </div>
+
+        {savedNotes && savedNotes.length > 0 && (
+           <div className="mt-8 pt-6 border-t border-slate-100">
+              <div className="flex items-center space-x-2 mb-3">
+                <Clock className="w-4 h-4 text-slate-400" />
+                <h3 className="text-sm font-medium text-slate-600">Recent Inputs</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedNotes.slice(0, 3).map(n => (
+                   <div key={n._id} className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-sm text-slate-600 line-clamp-2" title={n.content}>
+                     {n.content}
+                   </div>
+                ))}
+              </div>
+           </div>
+        )}
+      </div>
     </div>
   );
 }

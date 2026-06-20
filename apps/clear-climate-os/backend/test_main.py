@@ -16,14 +16,14 @@ def test_extract_evidence_empty():
     assert response.status_code == 400
 
 def test_generate_report():
-    response = client.post("/generate_report", json={"evidence_ids": ["ev-1", "ev-2"]})
+    response = client.post("/generate_report", json={"evidence_items": [{"type": "risk", "content": "test"}]})
     assert response.status_code == 200
     data = response.json()
     assert "title" in data
     assert "body" in data
 
 def test_generate_report_empty():
-    response = client.post("/generate_report", json={"evidence_ids": []})
+    response = client.post("/generate_report", json={"evidence_items": []})
     assert response.status_code == 400
 
 def test_qa_review():

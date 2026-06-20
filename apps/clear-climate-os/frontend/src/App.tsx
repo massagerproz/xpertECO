@@ -1,5 +1,6 @@
 
 import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { Leaf } from "lucide-react";
 import { NotesUploader } from "./NotesUploader";
 import { EvidenceReview } from "./EvidenceReview";
 import { ReportGenerator } from "./ReportGenerator";
@@ -9,19 +10,24 @@ const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
 function AppContent() {
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">CLEAR Climate Copilot</h1>
-          <p className="text-gray-600 mt-2">Convert scattered project information into structured reporting evidence.</p>
-        </header>
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center space-x-3">
+          <div className="p-2 bg-emerald-100 rounded-lg">
+            <Leaf className="w-6 h-6 text-emerald-600" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-slate-900 leading-tight">CLEAR Climate OS</h1>
+            <p className="text-sm text-slate-500">AI-Assisted Evidence & Reporting</p>
+          </div>
+        </div>
+      </header>
 
-        <main>
-          <NotesUploader />
-          <EvidenceReview />
-          <ReportGenerator />
-        </main>
-      </div>
+      <main className="max-w-5xl mx-auto px-6 py-8 space-y-8">
+        <NotesUploader />
+        <EvidenceReview />
+        <ReportGenerator />
+      </main>
     </div>
   );
 }
