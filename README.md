@@ -36,6 +36,35 @@ English | [中文](./README_zh.md)
 
 **Xpert AI** is an open-source enterprise-level AI system that perfectly integrates two major platforms: agent orchestration and data analysis.
 
+## 🌿 CLEAR Climate Copilot / OS
+
+The **CLEAR Climate Copilot** (also known as CLEAR Climate OS) is an isolated application built to help climate, ESG, conservation, NGO, and donor-funded project teams convert scattered project information into structured reporting evidence. It follows an AI-assisted workflow using a Python/FastAPI worker backend and a modern React/Convex frontend.
+
+### Architecture
+
+- **Backend (`apps/clear-climate-os/backend`)**: Built with Python and FastAPI. It exposes endpoints for AI-driven extraction of evidence from notes, generating report drafts from approved evidence, and performing QA reviews. Uses Pydantic for validation.
+- **Frontend (`apps/clear-climate-os/frontend`)**: Built with React (TypeScript), Vite, and TailwindCSS. It provides the user interface for inputting notes, reviewing and approving extracted evidence, and generating QA-checked reports.
+- **State Management**: Uses [Convex](https://convex.dev/) for real-time state synchronization, handling `notes`, `evidence`, `reports`, and `qa_reviews`.
+
+### How to Run
+
+1. **Start the FastAPI Backend**:
+   ```bash
+   cd apps/clear-climate-os/backend
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   uvicorn main:app --host 0.0.0.0 --port 8000
+   ```
+
+2. **Start the Frontend & Convex**:
+   ```bash
+   cd apps/clear-climate-os/frontend
+   npm install
+   npx convex dev # Starts the Convex dev server and provides URL
+   npm run dev    # Starts the Vite dev server
+   ```
+
 ## 💡 What's New
 
 **🚀 3.10 Agentic Apps & File Understanding!**
