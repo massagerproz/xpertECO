@@ -82,3 +82,6 @@ Thumbs.db
 .volumes/
 
 docker/volumes/
+apps/clear-climate-os/backend/venv/
+apps/clear-climate-os/backend/__pycache__/
+apps/clear-climate-os/backend/.pytest_cache/
