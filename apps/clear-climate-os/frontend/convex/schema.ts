@@ -30,4 +30,24 @@ export default defineSchema({
     ),
     createdAt: v.number(),
   }),
+  theory_of_change: defineTable({
+    category: v.string(),
+    description: v.string(),
+    status: v.string(), // 'pending', 'approved', 'rejected'
+    createdAt: v.number(),
+  }),
+  systems_thinking_variables: defineTable({
+    name: v.string(),
+    description: v.string(),
+    status: v.string(),
+    createdAt: v.number(),
+  }),
+  systems_thinking_links: defineTable({
+    source: v.string(),
+    target: v.string(),
+    effect: v.string(),
+    description: v.string(),
+    status: v.string(),
+    createdAt: v.number(),
+  }),
 });

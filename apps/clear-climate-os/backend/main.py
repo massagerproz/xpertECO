@@ -46,6 +46,33 @@ class QAReview(BaseModel):
 class ExtractedEvidenceList(BaseModel):
     items: List[ExtractedEvidence]
 
+class TOCContext(BaseModel):
+    notes: str
+
+class TOCItem(BaseModel):
+    category: str # 'input', 'activity', 'output', 'outcome', 'impact'
+    description: str
+
+class TOCDraft(BaseModel):
+    items: List[TOCItem]
+
+class SystemsContext(BaseModel):
+    notes: str
+
+class SystemVariable(BaseModel):
+    name: str
+    description: str
+
+class SystemLink(BaseModel):
+    source: str
+    target: str
+    effect: str # 'positive', 'negative'
+    description: str
+
+class SystemsDraft(BaseModel):
+    variables: List[SystemVariable]
+    links: List[SystemLink]
+
 @app.post("/extract_evidence", response_model=List[ExtractedEvidence])
 async def extract_evidence(payload: NotesPayload):
     if not payload.notes:
@@ -134,6 +161,66 @@ async def qa_review(payload: ReportPayload):
                  issue_type="weak_linkage",
                  description="The claim about battery delays needs more direct evidence from supplier communications."
              )
+        ]
+    )
+
+@app.post("/generate_toc", response_model=TOCDraft)
+async def generate_toc(payload: TOCContext):
+    if not payload.notes:
+        raise HTTPException(status_code=400, detail="Notes cannot be empty")
+
+    if os.getenv("OPENAI_API_KEY"):
+        try:
+            completion = await client.beta.chat.completions.parse(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant mapping project inputs into a Theory of Change (ToC). Categorize elements into 'input', 'activity', 'output', 'outcome', and 'impact'. Do not invent facts."},
+                    {"role": "user", "content": f"Context:\n{payload.notes}"}
+                ],
+                response_format=TOCDraft,
+            )
+            return completion.choices[0].message.parsed
+        except Exception as e:
+            print(f"OpenAI ToC generation failed: {e}")
+            # Fall through to mock logic on error
+
+    return TOCDraft(
+        items=[
+            TOCItem(category="input", description="Funding for solar panels"),
+            TOCItem(category="activity", description="Install 500kW solar capacity"),
+            TOCItem(category="output", description="500kW of solar power installed and operational"),
+            TOCItem(category="outcome", description="Reduced reliance on fossil fuel grids for local community"),
+            TOCItem(category="impact", description="Lower carbon emissions and increased energy resilience")
+        ]
+    )
+
+@app.post("/generate_systems_map", response_model=SystemsDraft)
+async def generate_systems_map(payload: SystemsContext):
+    if not payload.notes:
+        raise HTTPException(status_code=400, detail="Notes cannot be empty")
+
+    if os.getenv("OPENAI_API_KEY"):
+        try:
+            completion = await client.beta.chat.completions.parse(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are an assistant specialized in systems thinking. Extract key variables and causal relationships (positive or negative links) from the context. Build a causal loop diagram draft."},
+                    {"role": "user", "content": f"Context:\n{payload.notes}"}
+                ],
+                response_format=SystemsDraft,
+            )
+            return completion.choices[0].message.parsed
+        except Exception as e:
+            print(f"OpenAI Systems Map generation failed: {e}")
+            # Fall through to mock logic on error
+
+    return SystemsDraft(
+        variables=[
+            SystemVariable(name="Solar Adoption", description="Adoption rate of solar technology"),
+            SystemVariable(name="Energy Costs", description="Cost of electricity for the community")
+        ],
+        links=[
+            SystemLink(source="Solar Adoption", target="Energy Costs", effect="negative", description="Higher adoption reduces energy costs over time")
         ]
     )
 

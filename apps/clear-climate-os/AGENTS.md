@@ -20,10 +20,17 @@ This module uses an **Agent-Worker Hybrid Architecture** isolated from the core 
     *   **Rule**: Prefer Tailwind utility classes directly on HTML elements.
 
 *   **State Management (`apps/clear-climate-os/frontend/convex`)**: Convex.
-    *   Used for real-time workflow state (notes, evidence tracking, report drafting, QA flags).
+    *   Used for real-time workflow state (notes, evidence tracking, report drafting, QA flags, theory of change items, and systems thinking variables/links).
     *   **Rule**: Human approval is strictly required before extracted evidence is fully committed to the tracker.
     *   **Rule**: Always define strong `v.*` schemas for tables.
     *   **Rule**: Note schemas use `sourceType` (e.g., `meeting_note`, `activity_update`, `stakeholder_input`, `field_report`).
+
+## Features
+- **Evidence Extraction**: Automatically extract evidence strings categorizing them into risks, decisions, etc., from unstructured notes.
+- **Report Generation**: Synthesize a donor-funded project report based solely on approved evidence items.
+- **QA Reviews**: Automated AI check on generated reports to flag unsupported claims or weak linkages.
+- **Theory of Change**: Map unstructured inputs and project notes into categorized components: `input`, `activity`, `output`, `outcome`, and `impact`.
+- **Systems Thinking**: Automatically generate draft causal loops, extracting variables and establishing positive/negative causal links between them.
 
 ## Testing Requirements
 *   **Backend**: Execute `pytest test_main.py` in the backend directory to verify endpoint logic.

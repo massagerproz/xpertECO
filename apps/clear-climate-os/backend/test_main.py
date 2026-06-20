@@ -36,3 +36,30 @@ def test_qa_review():
 def test_qa_review_empty():
     response = client.post("/qa_review", json={"report_content": ""})
     assert response.status_code == 400
+
+def test_generate_toc():
+    response = client.post("/generate_toc", json={"notes": "Project started to install solar panels with funding."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "items" in data
+    assert isinstance(data["items"], list)
+    assert len(data["items"]) > 0
+    assert "category" in data["items"][0]
+
+def test_generate_toc_empty():
+    response = client.post("/generate_toc", json={"notes": ""})
+    assert response.status_code == 400
+
+def test_generate_systems_map():
+    response = client.post("/generate_systems_map", json={"notes": "Higher solar adoption leads to reduced energy costs."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "variables" in data
+    assert "links" in data
+    assert isinstance(data["variables"], list)
+    assert isinstance(data["links"], list)
+    assert len(data["variables"]) > 0
+
+def test_generate_systems_map_empty():
+    response = client.post("/generate_systems_map", json={"notes": ""})
+    assert response.status_code == 400

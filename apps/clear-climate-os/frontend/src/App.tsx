@@ -3,6 +3,8 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { Leaf } from "lucide-react";
 import { NotesUploader } from "./NotesUploader";
 import { EvidenceReview } from "./EvidenceReview";
+import { TheoryOfChange } from "./TheoryOfChange";
+import { SystemsThinking } from "./SystemsThinking";
 import { ReportGenerator } from "./ReportGenerator";
 
 // Initialize Convex Client
@@ -26,6 +28,10 @@ function AppContent() {
       <main className="max-w-5xl mx-auto px-6 py-8 space-y-8">
         <NotesUploader />
         <EvidenceReview />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <TheoryOfChange />
+          <SystemsThinking />
+        </div>
         <ReportGenerator />
       </main>
     </div>

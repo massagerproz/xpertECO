@@ -12,6 +12,88 @@ export const createNote = mutation({
   },
 });
 
+export const addTOCItem = mutation({
+  args: {
+    category: v.string(),
+    description: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("theory_of_change", {
+      category: args.category,
+      description: args.description,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateTOCItemStatus = mutation({
+  args: {
+    id: v.id("theory_of_change"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addSystemVariable = mutation({
+  args: {
+    name: v.string(),
+    description: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("systems_thinking_variables", {
+      name: args.name,
+      description: args.description,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateSystemVariableStatus = mutation({
+  args: {
+    id: v.id("systems_thinking_variables"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addSystemLink = mutation({
+  args: {
+    source: v.string(),
+    target: v.string(),
+    effect: v.string(),
+    description: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("systems_thinking_links", {
+      source: args.source,
+      target: args.target,
+      effect: args.effect,
+      description: args.description,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateSystemLinkStatus = mutation({
+  args: {
+    id: v.id("systems_thinking_links"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
 export const addEvidence = mutation({
   args: {
     noteId: v.optional(v.id("notes")),

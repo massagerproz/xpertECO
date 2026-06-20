@@ -33,3 +33,36 @@ export const getQAReviews = query({
       .collect();
   },
 });
+
+export const getTOCItems = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("theory_of_change").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
+export const getSystemVariables = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("systems_thinking_variables").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
+export const getSystemLinks = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("systems_thinking_links").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});

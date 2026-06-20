@@ -31,6 +31,34 @@ test.describe('CLEAR Climate OS Core Workflow', () => {
         pendingCount = await page.getByRole('button', { name: 'Approve' }).count();
     }
 
+    // New Step: Theory of Change
+    const generateTocBtn = page.getByRole('button', { name: 'Generate Map' });
+    await expect(generateTocBtn).toBeEnabled();
+    await generateTocBtn.click();
+
+    // Check that pending ToC items appear. Wait for check icon to be visible
+    await expect(page.locator('button > svg.lucide-check').first()).toBeVisible({ timeout: 15000 });
+    let pendingTocCount = await page.locator('button > svg.lucide-check').count();
+    while (pendingTocCount > 0) {
+        await page.locator('button > svg.lucide-check').first().click();
+        await page.waitForTimeout(500);
+        pendingTocCount = await page.locator('button > svg.lucide-check').count();
+    }
+
+    // New Step: Systems Thinking
+    const generateSystemsBtn = page.getByRole('button', { name: 'Extract Systems Map' });
+    await expect(generateSystemsBtn).toBeEnabled();
+    await generateSystemsBtn.click();
+
+    // Check that pending systems thinking items appear. Wait for check icon to be visible
+    await expect(page.locator('button > svg.lucide-check').first()).toBeVisible({ timeout: 15000 });
+    let pendingSystemsCount = await page.locator('button > svg.lucide-check').count();
+    while (pendingSystemsCount > 0) {
+        await page.locator('button > svg.lucide-check').first().click();
+        await page.waitForTimeout(500);
+        pendingSystemsCount = await page.locator('button > svg.lucide-check').count();
+    }
+
     // 3. Generate Report
     const generateBtn = page.getByRole('button', { name: 'Generate Report' });
     await expect(generateBtn).toBeEnabled();
