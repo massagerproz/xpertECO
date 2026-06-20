@@ -68,7 +68,23 @@ export function EvidenceReview() {
         </div>
 
         <div>
-          <h3 className="text-sm font-medium text-slate-500 mb-3 uppercase tracking-wider">Approved Tracker</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-slate-500 uppercase tracking-wider">Approved Tracker</h3>
+            {approvedEvidence && approvedEvidence.length > 0 && (
+               <div className="flex space-x-2 text-xs font-medium">
+                  {Object.entries(
+                    approvedEvidence.reduce((acc, ev) => {
+                      acc[ev.type] = (acc[ev.type] || 0) + 1;
+                      return acc;
+                    }, {} as Record<string, number>)
+                  ).map(([type, count]) => (
+                    <span key={type} className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full capitalize">
+                      {count} {type.replace('_', ' ')}
+                    </span>
+                  ))}
+               </div>
+            )}
+          </div>
           {approvedEvidence === undefined ? (
               <div className="animate-pulse flex space-x-4">
                 <div className="h-10 bg-slate-100 rounded w-full"></div>

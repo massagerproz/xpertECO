@@ -23,6 +23,11 @@ This module uses an **Agent-Worker Hybrid Architecture** isolated from the core 
     *   Used for real-time workflow state (notes, evidence tracking, report drafting, QA flags).
     *   **Rule**: Human approval is strictly required before extracted evidence is fully committed to the tracker.
     *   **Rule**: Always define strong `v.*` schemas for tables.
+    *   **Rule**: Note schemas use `sourceType` (e.g., `meeting_note`, `activity_update`, `stakeholder_input`, `field_report`).
+
+## Testing Requirements
+*   **Backend**: Execute `pytest test_main.py` in the backend directory to verify endpoint logic.
+*   **Frontend E2E**: Utilize Playwright (`npx playwright test`) inside the frontend directory for End-to-End coverage. Document procedures in `TESTING.md`.
 
 ## General Engineering Principles
 

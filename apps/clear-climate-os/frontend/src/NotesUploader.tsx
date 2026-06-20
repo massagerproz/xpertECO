@@ -5,6 +5,7 @@ import { api } from "../convex/_generated/api";
 
 export function NotesUploader() {
   const [notes, setNotes] = useState("");
+  const [sourceType, setSourceType] = useState("meeting_note");
   const [isExtracting, setIsExtracting] = useState(false);
   const createNote = useMutation(api.mutations.createNote);
   const addEvidence = useMutation(api.mutations.addEvidence);
@@ -17,16 +18,15 @@ export function NotesUploader() {
 
     try {
       // Save the raw note first
-      const noteId = await createNote({ content: notes });
+      const noteId = await createNote({ content: notes, sourceType });
 
       // Call the FastAPI backend to extract evidence
-      // Note: Assuming FastAPI is running on localhost:8000
       const response = await fetch("http://localhost:8000/extract_evidence", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ notes }),
+        body: JSON.stringify({ notes, source_type: sourceType }),
       });
 
       if (!response.ok) {
@@ -63,6 +63,19 @@ export function NotesUploader() {
       </div>
 
       <div className="p-6">
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-slate-700 mb-1">Source Type</label>
+          <select
+            className="w-full sm:w-auto p-2 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-slate-700"
+            value={sourceType}
+            onChange={(e) => setSourceType(e.target.value)}
+          >
+            <option value="meeting_note">Meeting Note</option>
+            <option value="activity_update">Activity Update</option>
+            <option value="stakeholder_input">Stakeholder Input</option>
+            <option value="field_report">Field Report</option>
+          </select>
+        </div>
         <textarea
           className="w-full p-4 border border-slate-200 rounded-lg mb-4 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none outline-none text-slate-700"
           rows={5}
@@ -93,8 +106,9 @@ export function NotesUploader() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {savedNotes.slice(0, 3).map(n => (
-                   <div key={n._id} className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-sm text-slate-600 line-clamp-2" title={n.content}>
-                     {n.content}
+                   <div key={n._id} className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-sm text-slate-600 flex flex-col" title={n.content}>
+                     <span className="text-xs font-semibold text-emerald-700 mb-1 capitalize">{(n.sourceType || 'Note').replace('_', ' ')}</span>
+                     <span className="line-clamp-2">{n.content}</span>
                    </div>
                 ))}
               </div>

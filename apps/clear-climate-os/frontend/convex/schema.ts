@@ -4,6 +4,7 @@ import { v } from "convex/values";
 export default defineSchema({
   notes: defineTable({
     content: v.string(),
+    sourceType: v.optional(v.string()),
     createdAt: v.number(),
   }),
   evidence: defineTable({

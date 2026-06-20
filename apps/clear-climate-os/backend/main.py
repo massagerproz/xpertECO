@@ -18,10 +18,11 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, 
 
 class NotesPayload(BaseModel):
     notes: str
+    source_type: str = "meeting_note"
 
 class ExtractedEvidence(BaseModel):
     id: str
-    type: str  # e.g., 'meeting_note', 'activity_update', 'risk'
+    type: str  # 'activity_update', 'stakeholder_input', 'risk', 'decision', 'follow_up_action'
     content: str
     source_reference: str
 
@@ -55,8 +56,8 @@ async def extract_evidence(payload: NotesPayload):
             completion = await client.beta.chat.completions.parse(
                 model="gpt-4o",
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant extracting structured evidence from notes. Extract facts, risks, and updates. Types can be 'meeting_note', 'risk', 'activity_update', etc. Generate a unique id starting with 'ev-' for each, and a short source_reference summary."},
-                    {"role": "user", "content": payload.notes}
+                    {"role": "system", "content": "You are a helpful assistant extracting structured evidence from project inputs. Categorize evidence strictly into one of these types: 'activity_update', 'stakeholder_input', 'risk', 'decision', or 'follow_up_action'. Generate a unique id starting with 'ev-' for each, and a short source_reference summary."},
+                    {"role": "user", "content": f"Source Type: {payload.source_type}\n\nContent:\n{payload.notes}"}
                 ],
                 response_format=ExtractedEvidenceList,
             )
@@ -69,15 +70,15 @@ async def extract_evidence(payload: NotesPayload):
     return [
         ExtractedEvidence(
             id=f"ev-{uuid.uuid4().hex[:8]}",
-            type="meeting_note",
-            content="Discussed the new solar panel installation timeline.",
-            source_reference="Meeting on Oct 24"
+            type="decision",
+            content="Approved the revised solar panel installation timeline.",
+            source_reference=payload.source_type
         ),
         ExtractedEvidence(
             id=f"ev-{uuid.uuid4().hex[:8]}",
             type="risk",
-            content="Supply chain delays for batteries.",
-            source_reference="Meeting on Oct 24"
+            content="Supply chain delays for batteries continue to pose a threat to Q4 delivery.",
+            source_reference=payload.source_type
         )
     ]
 

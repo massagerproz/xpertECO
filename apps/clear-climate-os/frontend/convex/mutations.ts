@@ -2,10 +2,11 @@ import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const createNote = mutation({
-  args: { content: v.string() },
+  args: { content: v.string(), sourceType: v.string() },
   handler: async (ctx, args) => {
     return await ctx.db.insert("notes", {
       content: args.content,
+      sourceType: args.sourceType,
       createdAt: Date.now(),
     });
   },
