@@ -7,6 +7,7 @@ import { TheoryOfChange } from "./TheoryOfChange";
 import { SystemsThinking } from "./SystemsThinking";
 import { StakeholderMapping } from "./StakeholderMapping";
 import { ResourceTracker } from "./ResourceTracker";
+import { RiskAssessment } from "./RiskAssessment";
 import { ReportGenerator } from "./ReportGenerator";
 
 // Initialize Convex Client
@@ -35,6 +36,7 @@ function AppContent() {
           <SystemsThinking />
           <StakeholderMapping />
           <ResourceTracker />
+          <RiskAssessment />
         </div>
         <ReportGenerator />
       </main>

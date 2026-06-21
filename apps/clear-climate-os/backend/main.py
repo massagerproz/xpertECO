@@ -91,6 +91,15 @@ class ResourceItem(BaseModel):
 class ResourceDraft(BaseModel):
     resources: List[ResourceItem]
 
+class RiskItem(BaseModel):
+    name: str
+    impact: str # 'high', 'medium', 'low'
+    likelihood: str # 'high', 'medium', 'low'
+    mitigation: str
+
+class RiskDraft(BaseModel):
+    risks: List[RiskItem]
+
 @app.post("/extract_evidence", response_model=List[ExtractedEvidence])
 async def extract_evidence(payload: NotesPayload):
     if not payload.notes:
@@ -293,6 +302,33 @@ async def generate_resources(payload: NotesPayload):
         resources=[
             ResourceItem(name="$50k Grant", category="financial", status="secured", description="Initial funding for the solar project"),
             ResourceItem(name="Solar Panels", category="material", status="at_risk", description="Supply chain delays affecting delivery")
+        ]
+    )
+
+@app.post("/generate_risks", response_model=RiskDraft)
+async def generate_risks(payload: NotesPayload):
+    if not payload.notes:
+        raise HTTPException(status_code=400, detail="Notes cannot be empty")
+
+    if os.getenv("OPENAI_API_KEY"):
+        try:
+            completion = await client.beta.chat.completions.parse(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant mapping project risks. Extract key risks from the context, categorize their impact and likelihood ('high', 'medium', 'low'), and propose a brief mitigation strategy."},
+                    {"role": "user", "content": f"Context:\n{payload.notes}"}
+                ],
+                response_format=RiskDraft,
+            )
+            return completion.choices[0].message.parsed
+        except Exception as e:
+            print(f"OpenAI Risk generation failed: {e}")
+            # Fall through to mock logic on error
+
+    return RiskDraft(
+        risks=[
+            RiskItem(name="Supply Chain Delay", impact="high", likelihood="high", mitigation="Diversify battery suppliers immediately."),
+            RiskItem(name="Community Opposition", impact="medium", likelihood="low", mitigation="Hold town hall meetings to address concerns transparently.")
         ]
     )
 

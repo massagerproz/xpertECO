@@ -87,3 +87,15 @@ def test_generate_resources():
 def test_generate_resources_empty():
     response = client.post("/generate_resources", json={"notes": ""})
     assert response.status_code == 400
+
+def test_generate_risks():
+    response = client.post("/generate_risks", json={"notes": "There are severe supply chain delays."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "risks" in data
+    assert isinstance(data["risks"], list)
+    assert len(data["risks"]) > 0
+
+def test_generate_risks_empty():
+    response = client.post("/generate_risks", json={"notes": ""})
+    assert response.status_code == 400

@@ -154,6 +154,36 @@ export const updateResourceStatus = mutation({
   },
 });
 
+export const addRisk = mutation({
+  args: {
+    name: v.string(),
+    impact: v.string(),
+    likelihood: v.string(),
+    mitigation: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("risks", {
+      name: args.name,
+      impact: args.impact,
+      likelihood: args.likelihood,
+      mitigation: args.mitigation,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateRiskStatus = mutation({
+  args: {
+    id: v.id("risks"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
 export const addEvidence = mutation({
   args: {
     noteId: v.optional(v.id("notes")),

@@ -23,8 +23,9 @@ The `workflow.spec.ts` test covers the core user journey:
 4. **Systems Thinking**: Checking system variables and links generation for positive and negative loops.
 5. **Stakeholder Mapping**: Validating the extraction of key stakeholders alongside influence and interest analysis.
 6. **Resource Tracking**: Ensuring proper categorization of needs (financial, material, human) and tracking status definitions.
-7. **Generate**: Triggering the AI to draft a report based solely on approved evidence.
-8. **QA**: Running the AI QA review to verify the generated report against evidence constraints.
+7. **Risk Assessment**: Validating extraction of project risks along with severity mapping and mitigation generation.
+8. **Generate**: Triggering the AI to draft a report based solely on approved evidence.
+9. **QA**: Running the AI QA review to verify the generated report against evidence constraints.
 
 Additionally, `features.spec.ts` handles smoke checks for basic visual components.
 

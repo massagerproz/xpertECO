@@ -66,4 +66,12 @@ export default defineSchema({
     status: v.string(),
     createdAt: v.number(),
   }),
+  risks: defineTable({
+    name: v.string(),
+    impact: v.string(),
+    likelihood: v.string(),
+    mitigation: v.string(),
+    status: v.string(),
+    createdAt: v.number(),
+  }),
 });

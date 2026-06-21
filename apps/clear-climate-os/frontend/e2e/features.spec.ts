@@ -14,4 +14,7 @@ test('has components', async ({ page }) => {
 
   // Verify Resource Tracker is present
   await expect(page.locator('text=Resource Tracker')).toBeVisible();
+
+  // Verify Risk Assessment is present
+  await expect(page.locator('text=Risk Assessment')).toBeVisible();
 });
