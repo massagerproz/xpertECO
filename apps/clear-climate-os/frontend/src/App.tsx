@@ -3,15 +3,22 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { Leaf } from "lucide-react";
 import { NotesUploader } from "./NotesUploader";
 import { EvidenceReview } from "./EvidenceReview";
+import { TheoryOfChange } from "./TheoryOfChange";
+import { SystemsThinking } from "./SystemsThinking";
+import { StakeholderMapping } from "./StakeholderMapping";
+import { ResourceTracker } from "./ResourceTracker";
+import { RiskAssessment } from "./RiskAssessment";
+import { ActionItemsTracker } from "./ActionItemsTracker";
 import { ReportGenerator } from "./ReportGenerator";
+import { motion } from "framer-motion";
 
 // Initialize Convex Client
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
 function AppContent() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <div className="min-h-screen">
+      <header className="glass-panel sticky top-0 z-10 rounded-none border-t-0 border-x-0">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center space-x-3">
           <div className="p-2 bg-emerald-100 rounded-lg">
             <Leaf className="w-6 h-6 text-emerald-600" />
@@ -23,11 +30,24 @@ function AppContent() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-8 space-y-8">
+      <motion.main
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-5xl mx-auto px-6 py-8 space-y-8"
+      >
         <NotesUploader />
         <EvidenceReview />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <TheoryOfChange />
+          <SystemsThinking />
+          <StakeholderMapping />
+          <ResourceTracker />
+          <RiskAssessment />
+          <ActionItemsTracker />
+        </div>
         <ReportGenerator />
-      </main>
+      </motion.main>
     </div>
   );
 }

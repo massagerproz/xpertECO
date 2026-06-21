@@ -36,3 +36,78 @@ def test_qa_review():
 def test_qa_review_empty():
     response = client.post("/qa_review", json={"report_content": ""})
     assert response.status_code == 400
+
+def test_generate_toc():
+    response = client.post("/generate_toc", json={"notes": "Project started to install solar panels with funding."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "items" in data
+    assert isinstance(data["items"], list)
+    assert len(data["items"]) > 0
+    assert "category" in data["items"][0]
+
+def test_generate_toc_empty():
+    response = client.post("/generate_toc", json={"notes": ""})
+    assert response.status_code == 400
+
+def test_generate_systems_map():
+    response = client.post("/generate_systems_map", json={"notes": "Higher solar adoption leads to reduced energy costs."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "variables" in data
+    assert "links" in data
+    assert isinstance(data["variables"], list)
+    assert isinstance(data["links"], list)
+    assert len(data["variables"]) > 0
+
+def test_generate_systems_map_empty():
+    response = client.post("/generate_systems_map", json={"notes": ""})
+    assert response.status_code == 400
+
+def test_generate_stakeholders():
+    response = client.post("/generate_stakeholders", json={"notes": "Local community opposes the new factory."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "stakeholders" in data
+    assert isinstance(data["stakeholders"], list)
+    assert len(data["stakeholders"]) > 0
+
+def test_generate_stakeholders_empty():
+    response = client.post("/generate_stakeholders", json={"notes": ""})
+    assert response.status_code == 400
+
+def test_generate_resources():
+    response = client.post("/generate_resources", json={"notes": "We need more financial backing."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "resources" in data
+    assert isinstance(data["resources"], list)
+    assert len(data["resources"]) > 0
+
+def test_generate_resources_empty():
+    response = client.post("/generate_resources", json={"notes": ""})
+    assert response.status_code == 400
+
+def test_generate_risks():
+    response = client.post("/generate_risks", json={"notes": "There are severe supply chain delays."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "risks" in data
+    assert isinstance(data["risks"], list)
+    assert len(data["risks"]) > 0
+
+def test_generate_risks_empty():
+    response = client.post("/generate_risks", json={"notes": ""})
+    assert response.status_code == 400
+
+def test_generate_action_items():
+    response = client.post("/generate_action_items", json={"notes": "We need to finish the budget by tomorrow."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "actions" in data
+    assert isinstance(data["actions"], list)
+    assert len(data["actions"]) > 0
+
+def test_generate_action_items_empty():
+    response = client.post("/generate_action_items", json={"notes": ""})
+    assert response.status_code == 400

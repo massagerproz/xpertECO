@@ -18,6 +18,50 @@ export const getEvidence = query({
   },
 });
 
+export const getActionItems = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("action_items").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
+export const getRisks = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("risks").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
+export const getStakeholders = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("stakeholders").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
+export const getResources = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("resources").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
 export const getReports = query({
   handler: async (ctx) => {
     return await ctx.db.query("reports").order("desc").collect();
@@ -31,5 +75,38 @@ export const getQAReviews = query({
       .query("qa_reviews")
       .filter((q) => q.eq(q.field("reportId"), args.reportId))
       .collect();
+  },
+});
+
+export const getTOCItems = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("theory_of_change").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
+export const getSystemVariables = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("systems_thinking_variables").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
+export const getSystemLinks = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("systems_thinking_links").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
   },
 });

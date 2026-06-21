@@ -12,6 +12,208 @@ export const createNote = mutation({
   },
 });
 
+export const addTOCItem = mutation({
+  args: {
+    category: v.string(),
+    description: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("theory_of_change", {
+      category: args.category,
+      description: args.description,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateTOCItemStatus = mutation({
+  args: {
+    id: v.id("theory_of_change"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addSystemVariable = mutation({
+  args: {
+    name: v.string(),
+    description: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("systems_thinking_variables", {
+      name: args.name,
+      description: args.description,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateSystemVariableStatus = mutation({
+  args: {
+    id: v.id("systems_thinking_variables"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addSystemLink = mutation({
+  args: {
+    source: v.string(),
+    target: v.string(),
+    effect: v.string(),
+    description: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("systems_thinking_links", {
+      source: args.source,
+      target: args.target,
+      effect: args.effect,
+      description: args.description,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateSystemLinkStatus = mutation({
+  args: {
+    id: v.id("systems_thinking_links"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addStakeholder = mutation({
+  args: {
+    name: v.string(),
+    role: v.string(),
+    influence: v.string(),
+    interest: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("stakeholders", {
+      name: args.name,
+      role: args.role,
+      influence: args.influence,
+      interest: args.interest,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateStakeholderStatus = mutation({
+  args: {
+    id: v.id("stakeholders"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addResource = mutation({
+  args: {
+    name: v.string(),
+    category: v.string(),
+    statusLabel: v.string(),
+    description: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("resources", {
+      name: args.name,
+      category: args.category,
+      statusLabel: args.statusLabel,
+      description: args.description,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateResourceStatus = mutation({
+  args: {
+    id: v.id("resources"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addRisk = mutation({
+  args: {
+    name: v.string(),
+    impact: v.string(),
+    likelihood: v.string(),
+    mitigation: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("risks", {
+      name: args.name,
+      impact: args.impact,
+      likelihood: args.likelihood,
+      mitigation: args.mitigation,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateRiskStatus = mutation({
+  args: {
+    id: v.id("risks"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addActionItem = mutation({
+  args: {
+    task: v.string(),
+    owner: v.string(),
+    deadline: v.string(),
+    priority: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("action_items", {
+      task: args.task,
+      owner: args.owner,
+      deadline: args.deadline,
+      priority: args.priority,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateActionItemStatus = mutation({
+  args: {
+    id: v.id("action_items"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
 export const addEvidence = mutation({
   args: {
     noteId: v.optional(v.id("notes")),

@@ -19,8 +19,16 @@ We use Playwright for robust End-to-End (E2E) testing of the frontend and its in
 The `workflow.spec.ts` test covers the core user journey:
 1. **Upload & Extract**: Submitting meeting notes and waiting for the AI extraction.
 2. **Review**: Interacting with the real-time pending evidence queue and approving items.
-3. **Generate**: Triggering the AI to draft a report based solely on approved evidence.
-4. **QA**: Running the AI QA review to verify the generated report against evidence constraints.
+3. **Theory of Change**: Testing the extraction of unstructured inputs to map input, activity, output, outcome, and impact variables.
+4. **Systems Thinking**: Checking system variables and links generation for positive and negative loops.
+5. **Stakeholder Mapping**: Validating the extraction of key stakeholders alongside influence and interest analysis.
+6. **Resource Tracking**: Ensuring proper categorization of needs (financial, material, human) and tracking status definitions.
+7. **Risk Assessment**: Validating extraction of project risks along with severity mapping and mitigation generation.
+8. **Action Items**: Testing the categorization and extraction of tasks, owners, deadlines, and prioritization into the glassmorphic tracker.
+9. **Generate**: Triggering the AI to draft a report based solely on approved evidence.
+10. **QA**: Running the AI QA review to verify the generated report against evidence constraints.
+
+Additionally, `features.spec.ts` handles smoke checks for basic visual components.
 
 ## Backend Unit Testing
 
