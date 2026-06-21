@@ -73,6 +73,24 @@ class SystemsDraft(BaseModel):
     variables: List[SystemVariable]
     links: List[SystemLink]
 
+class Stakeholder(BaseModel):
+    name: str
+    role: str
+    influence: str # 'high', 'medium', 'low'
+    interest: str # 'high', 'medium', 'low'
+
+class StakeholderDraft(BaseModel):
+    stakeholders: List[Stakeholder]
+
+class ResourceItem(BaseModel):
+    name: str
+    category: str # 'financial', 'human', 'material', 'time'
+    status: str # 'secured', 'needed', 'at_risk'
+    description: str
+
+class ResourceDraft(BaseModel):
+    resources: List[ResourceItem]
+
 @app.post("/extract_evidence", response_model=List[ExtractedEvidence])
 async def extract_evidence(payload: NotesPayload):
     if not payload.notes:
@@ -221,6 +239,60 @@ async def generate_systems_map(payload: SystemsContext):
         ],
         links=[
             SystemLink(source="Solar Adoption", target="Energy Costs", effect="negative", description="Higher adoption reduces energy costs over time")
+        ]
+    )
+
+@app.post("/generate_stakeholders", response_model=StakeholderDraft)
+async def generate_stakeholders(payload: NotesPayload):
+    if not payload.notes:
+        raise HTTPException(status_code=400, detail="Notes cannot be empty")
+
+    if os.getenv("OPENAI_API_KEY"):
+        try:
+            completion = await client.beta.chat.completions.parse(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant mapping stakeholders from project inputs. Identify key stakeholders, their roles, and classify their influence and interest as 'high', 'medium', or 'low'."},
+                    {"role": "user", "content": f"Context:\n{payload.notes}"}
+                ],
+                response_format=StakeholderDraft,
+            )
+            return completion.choices[0].message.parsed
+        except Exception as e:
+            print(f"OpenAI Stakeholder generation failed: {e}")
+            # Fall through to mock logic on error
+
+    return StakeholderDraft(
+        stakeholders=[
+            Stakeholder(name="Local Government", role="Regulator and approver", influence="high", interest="medium"),
+            Stakeholder(name="Community Members", role="Beneficiaries", influence="medium", interest="high")
+        ]
+    )
+
+@app.post("/generate_resources", response_model=ResourceDraft)
+async def generate_resources(payload: NotesPayload):
+    if not payload.notes:
+        raise HTTPException(status_code=400, detail="Notes cannot be empty")
+
+    if os.getenv("OPENAI_API_KEY"):
+        try:
+            completion = await client.beta.chat.completions.parse(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are an assistant tracking resources. Identify resource needs from the context, categorize them ('financial', 'human', 'material', 'time'), and specify their status ('secured', 'needed', 'at_risk')."},
+                    {"role": "user", "content": f"Context:\n{payload.notes}"}
+                ],
+                response_format=ResourceDraft,
+            )
+            return completion.choices[0].message.parsed
+        except Exception as e:
+            print(f"OpenAI Resource generation failed: {e}")
+            # Fall through to mock logic on error
+
+    return ResourceDraft(
+        resources=[
+            ResourceItem(name="$50k Grant", category="financial", status="secured", description="Initial funding for the solar project"),
+            ResourceItem(name="Solar Panels", category="material", status="at_risk", description="Supply chain delays affecting delivery")
         ]
     )
 

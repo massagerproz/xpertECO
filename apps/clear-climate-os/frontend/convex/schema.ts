@@ -50,4 +50,20 @@ export default defineSchema({
     status: v.string(),
     createdAt: v.number(),
   }),
+  stakeholders: defineTable({
+    name: v.string(),
+    role: v.string(),
+    influence: v.string(),
+    interest: v.string(),
+    status: v.string(),
+    createdAt: v.number(),
+  }),
+  resources: defineTable({
+    name: v.string(),
+    category: v.string(),
+    statusLabel: v.string(), // 'secured', 'needed', 'at_risk'
+    description: v.string(),
+    status: v.string(),
+    createdAt: v.number(),
+  }),
 });

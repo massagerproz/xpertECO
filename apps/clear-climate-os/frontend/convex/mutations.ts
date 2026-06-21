@@ -94,6 +94,66 @@ export const updateSystemLinkStatus = mutation({
   },
 });
 
+export const addStakeholder = mutation({
+  args: {
+    name: v.string(),
+    role: v.string(),
+    influence: v.string(),
+    interest: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("stakeholders", {
+      name: args.name,
+      role: args.role,
+      influence: args.influence,
+      interest: args.interest,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateStakeholderStatus = mutation({
+  args: {
+    id: v.id("stakeholders"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
+export const addResource = mutation({
+  args: {
+    name: v.string(),
+    category: v.string(),
+    statusLabel: v.string(),
+    description: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("resources", {
+      name: args.name,
+      category: args.category,
+      statusLabel: args.statusLabel,
+      description: args.description,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateResourceStatus = mutation({
+  args: {
+    id: v.id("resources"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
 export const addEvidence = mutation({
   args: {
     noteId: v.optional(v.id("notes")),

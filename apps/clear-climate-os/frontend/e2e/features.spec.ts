@@ -8,4 +8,10 @@ test('has components', async ({ page }) => {
 
   // Verify Systems Thinking is present
   await expect(page.locator('text=Systems Thinking')).toBeVisible();
+
+  // Verify Stakeholder Mapping is present
+  await expect(page.locator('text=Stakeholder Mapping')).toBeVisible();
+
+  // Verify Resource Tracker is present
+  await expect(page.locator('text=Resource Tracker')).toBeVisible();
 });

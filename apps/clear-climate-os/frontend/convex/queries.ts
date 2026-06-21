@@ -18,6 +18,28 @@ export const getEvidence = query({
   },
 });
 
+export const getStakeholders = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("stakeholders").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
+export const getResources = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("resources").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
 export const getReports = query({
   handler: async (ctx) => {
     return await ctx.db.query("reports").order("desc").collect();

@@ -63,3 +63,27 @@ def test_generate_systems_map():
 def test_generate_systems_map_empty():
     response = client.post("/generate_systems_map", json={"notes": ""})
     assert response.status_code == 400
+
+def test_generate_stakeholders():
+    response = client.post("/generate_stakeholders", json={"notes": "Local community opposes the new factory."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "stakeholders" in data
+    assert isinstance(data["stakeholders"], list)
+    assert len(data["stakeholders"]) > 0
+
+def test_generate_stakeholders_empty():
+    response = client.post("/generate_stakeholders", json={"notes": ""})
+    assert response.status_code == 400
+
+def test_generate_resources():
+    response = client.post("/generate_resources", json={"notes": "We need more financial backing."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "resources" in data
+    assert isinstance(data["resources"], list)
+    assert len(data["resources"]) > 0
+
+def test_generate_resources_empty():
+    response = client.post("/generate_resources", json={"notes": ""})
+    assert response.status_code == 400

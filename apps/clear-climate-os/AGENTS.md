@@ -31,6 +31,8 @@ This module uses an **Agent-Worker Hybrid Architecture** isolated from the core 
 - **QA Reviews**: Automated AI check on generated reports to flag unsupported claims or weak linkages.
 - **Theory of Change**: Map unstructured inputs and project notes into categorized components: `input`, `activity`, `output`, `outcome`, and `impact`.
 - **Systems Thinking**: Automatically generate draft causal loops, extracting variables and establishing positive/negative causal links between them.
+- **Stakeholder Mapping**: Extract key project stakeholders, their roles, and classify their influence and interest (high, medium, low).
+- **Resource Tracker**: Identify financial, human, and material resource needs and their statuses (secured, needed, at risk) from context.
 
 ## Testing Requirements
 *   **Backend**: Execute `pytest test_main.py` in the backend directory to verify endpoint logic.

@@ -5,6 +5,8 @@ import { NotesUploader } from "./NotesUploader";
 import { EvidenceReview } from "./EvidenceReview";
 import { TheoryOfChange } from "./TheoryOfChange";
 import { SystemsThinking } from "./SystemsThinking";
+import { StakeholderMapping } from "./StakeholderMapping";
+import { ResourceTracker } from "./ResourceTracker";
 import { ReportGenerator } from "./ReportGenerator";
 
 // Initialize Convex Client
@@ -31,6 +33,8 @@ function AppContent() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <TheoryOfChange />
           <SystemsThinking />
+          <StakeholderMapping />
+          <ResourceTracker />
         </div>
         <ReportGenerator />
       </main>
