@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Wallet, Check, X, Box, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function ResourceTracker() {
   const notes = useQuery(api.queries.getNotes) || [];
@@ -54,53 +55,64 @@ export function ResourceTracker() {
             Map financial, human, and material resources
           </p>
         </div>
-        <button
+        <motion.button
+          whileHover={(!isGenerating && notes.length > 0) ? { scale: 1.02 } : {}}
+          whileTap={(!isGenerating && notes.length > 0) ? { scale: 0.98 } : {}}
           onClick={handleGenerate}
           disabled={isGenerating || notes.length === 0}
           className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition-colors"
         >
           {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wallet className="w-4 h-4" />}
           Extract Resources
-        </button>
+        </motion.button>
       </div>
 
       <div className="p-6">
         {pendingResources.length > 0 && (
-          <div className="mb-8">
+          <motion.div layout className="mb-8">
             <h3 className="text-sm font-medium text-slate-700 mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-amber-400"></span>
               Requires Review ({pendingResources.length})
             </h3>
-            <div className="space-y-3">
-              {pendingResources.map((r) => (
-                <div key={r._id} className="p-4 bg-amber-50 border border-amber-100 rounded-lg flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="font-semibold text-slate-800">{r.name}</p>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-100 text-amber-800">
-                        {r.category}
+            <motion.div layout className="space-y-3">
+              <AnimatePresence>
+                {pendingResources.map((r) => (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    key={r._id}
+                    className="p-4 bg-amber-50 border border-amber-100 rounded-lg flex justify-between items-start"
+                  >
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className="font-semibold text-slate-800">{r.name}</p>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-100 text-amber-800">
+                          {r.category}
+                        </span>
+                      </div>
+                      <p className="text-sm text-slate-600 mb-2">{r.description}</p>
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-white border border-slate-200 text-slate-500">
+                        State: {r.statusLabel}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-600 mb-2">{r.description}</p>
-                    <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-white border border-slate-200 text-slate-500">
-                      State: {r.statusLabel}
-                    </span>
-                  </div>
-                  <div className="flex gap-2 ml-4">
-                    <button onClick={() => updateResourceStatus({ id: r._id, status: "approved" })} className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-md">
-                      <Check className="w-4 h-4" />
-                    </button>
-                    <button onClick={() => updateResourceStatus({ id: r._id, status: "rejected" })} className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-md">
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                    <div className="flex gap-2 ml-4">
+                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => updateResourceStatus({ id: r._id, status: "approved" })} className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-md">
+                        <Check className="w-4 h-4" />
+                      </motion.button>
+                      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => updateResourceStatus({ id: r._id, status: "rejected" })} className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-md">
+                        <X className="w-4 h-4" />
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
         )}
 
-        <div>
+        <motion.div layout>
           <h3 className="text-sm font-medium text-slate-700 mb-4 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
             Approved Resources ({approvedResources.length})
@@ -111,28 +123,36 @@ export function ResourceTracker() {
               <p className="text-sm text-slate-500">No approved resources yet.</p>
             </div>
           ) : (
-            <div className="grid gap-3">
-              {approvedResources.map((r) => (
-                <div key={r._id} className="p-4 border border-slate-100 rounded-lg bg-white">
-                  <div className="flex justify-between items-start mb-2">
-                    <p className="font-medium text-slate-800">{r.name}</p>
-                    <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded ${
-                      r.statusLabel === 'secured' ? 'bg-emerald-100 text-emerald-700' :
-                      r.statusLabel === 'at_risk' ? 'bg-rose-100 text-rose-700' :
-                      'bg-amber-100 text-amber-700'
-                    }`}>
-                      {r.statusLabel}
+            <motion.div layout className="grid gap-3">
+              <AnimatePresence>
+                {approvedResources.map((r) => (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    key={r._id}
+                    className="p-4 border border-slate-100 rounded-lg bg-white"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <p className="font-medium text-slate-800">{r.name}</p>
+                      <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded ${
+                        r.statusLabel === 'secured' ? 'bg-emerald-100 text-emerald-700' :
+                        r.statusLabel === 'at_risk' ? 'bg-rose-100 text-rose-700' :
+                        'bg-amber-100 text-amber-700'
+                      }`}>
+                        {r.statusLabel}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-500 mb-2">{r.description}</p>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
+                      {r.category}
                     </span>
-                  </div>
-                  <p className="text-sm text-slate-500 mb-2">{r.description}</p>
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-                    {r.category}
-                  </span>
-                </div>
-              ))}
-            </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

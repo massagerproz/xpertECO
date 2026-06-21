@@ -9,6 +9,7 @@ import { StakeholderMapping } from "./StakeholderMapping";
 import { ResourceTracker } from "./ResourceTracker";
 import { RiskAssessment } from "./RiskAssessment";
 import { ReportGenerator } from "./ReportGenerator";
+import { motion } from "framer-motion";
 
 // Initialize Convex Client
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
@@ -28,7 +29,12 @@ function AppContent() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-8 space-y-8">
+      <motion.main
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-5xl mx-auto px-6 py-8 space-y-8"
+      >
         <NotesUploader />
         <EvidenceReview />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -39,7 +45,7 @@ function AppContent() {
           <RiskAssessment />
         </div>
         <ReportGenerator />
-      </main>
+      </motion.main>
     </div>
   );
 }

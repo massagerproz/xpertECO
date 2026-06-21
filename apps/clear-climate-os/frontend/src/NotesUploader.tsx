@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { Sparkles, MessageSquarePlus, Clock } from "lucide-react";
 import { api } from "../convex/_generated/api";
+import { motion } from "framer-motion";
 
 export function NotesUploader() {
   const [notes, setNotes] = useState("");
@@ -88,14 +89,16 @@ export function NotesUploader() {
           <p className="text-sm text-slate-500">
             {notes.length} characters
           </p>
-          <button
+          <motion.button
+            whileHover={(!isExtracting && notes.trim()) ? { scale: 1.02 } : {}}
+            whileTap={(!isExtracting && notes.trim()) ? { scale: 0.98 } : {}}
             className="flex items-center space-x-2 bg-slate-900 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             onClick={handleExtract}
             disabled={isExtracting || !notes.trim()}
           >
             <Sparkles className={`w-4 h-4 ${isExtracting ? 'animate-pulse' : ''}`} />
             <span>{isExtracting ? "Extracting..." : "Extract Evidence"}</span>
-          </button>
+          </motion.button>
         </div>
 
         {savedNotes && savedNotes.length > 0 && (

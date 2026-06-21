@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { FileText, Download, ShieldAlert, FileOutput } from "lucide-react";
 import { api } from "../convex/_generated/api";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function ReportGenerator() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -104,14 +105,16 @@ export function ReportGenerator() {
           <FileText className="w-5 h-5 text-slate-400" />
           <h2 className="text-lg font-semibold text-slate-800">3. Report Draft & QA</h2>
         </div>
-        <button
+        <motion.button
+          whileHover={!(isGenerating || !approvedEvidence || approvedEvidence.length === 0) ? { scale: 1.02 } : {}}
+          whileTap={!(isGenerating || !approvedEvidence || approvedEvidence.length === 0) ? { scale: 0.98 } : {}}
           className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
           onClick={handleGenerateReport}
           disabled={isGenerating || !approvedEvidence || approvedEvidence.length === 0}
         >
           <FileOutput className={`w-4 h-4 ${isGenerating ? 'animate-pulse' : ''}`} />
           <span>{isGenerating ? "Generating Draft..." : "Generate Report"}</span>
-        </button>
+        </motion.button>
       </div>
 
       <div className="p-6 bg-slate-50/50">
@@ -126,36 +129,48 @@ export function ReportGenerator() {
                 <p className="text-slate-400 text-sm mt-1">Approve evidence above and click Generate.</p>
               </div>
           ) : (
-              <div className="space-y-6">
-                  {reports.map((report) => (
-                      <div key={report._id} className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm transition-all hover:shadow-md">
-                          <h4 className="font-bold text-xl text-slate-800 mb-3">{report.title}</h4>
-                          <div className="prose prose-slate prose-sm max-w-none mb-6 text-slate-600">
-                             <p>{report.body}</p>
-                          </div>
+              <motion.div layout className="space-y-6">
+                  <AnimatePresence>
+                    {reports.map((report) => (
+                        <motion.div
+                            layout
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            key={report._id}
+                            className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm transition-all hover:shadow-md"
+                        >
+                            <h4 className="font-bold text-xl text-slate-800 mb-3">{report.title}</h4>
+                            <div className="prose prose-slate prose-sm max-w-none mb-6 text-slate-600">
+                               <p>{report.body}</p>
+                            </div>
 
-                          <div className="pt-4 border-t border-slate-100 flex flex-wrap gap-3">
-                              <button
-                                  onClick={() => handleRunQA(report._id, report.body)}
-                                  disabled={isReviewing}
-                                  className="flex items-center space-x-1.5 text-sm bg-purple-50 text-purple-700 px-4 py-2 rounded-lg hover:bg-purple-100 border border-purple-200 font-medium transition-colors disabled:opacity-50"
-                              >
-                                  <ShieldAlert className={`w-4 h-4 ${isReviewing ? 'animate-pulse' : ''}`} />
-                                  <span>{isReviewing ? "Running QA..." : "Run AI QA Review"}</span>
-                              </button>
-                              <button
-                                  onClick={() => alert(`Exported: \n\n${report.title}\n\n${report.body}`)}
-                                  className="flex items-center space-x-1.5 text-sm bg-white text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 border border-slate-300 font-medium transition-colors"
-                              >
-                                  <Download className="w-4 h-4" />
-                                  <span>Export</span>
-                              </button>
-                          </div>
+                            <div className="pt-4 border-t border-slate-100 flex flex-wrap gap-3">
+                                <motion.button
+                                    whileHover={!isReviewing ? { scale: 1.05 } : {}}
+                                    whileTap={!isReviewing ? { scale: 0.95 } : {}}
+                                    onClick={() => handleRunQA(report._id, report.body)}
+                                    disabled={isReviewing}
+                                    className="flex items-center space-x-1.5 text-sm bg-purple-50 text-purple-700 px-4 py-2 rounded-lg hover:bg-purple-100 border border-purple-200 font-medium transition-colors disabled:opacity-50"
+                                >
+                                    <ShieldAlert className={`w-4 h-4 ${isReviewing ? 'animate-pulse' : ''}`} />
+                                    <span>{isReviewing ? "Running QA..." : "Run AI QA Review"}</span>
+                                </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => alert(`Exported: \n\n${report.title}\n\n${report.body}`)}
+                                    className="flex items-center space-x-1.5 text-sm bg-white text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 border border-slate-300 font-medium transition-colors"
+                                >
+                                    <Download className="w-4 h-4" />
+                                    <span>Export</span>
+                                </motion.button>
+                            </div>
 
-                          <QADisplay reportId={report._id} />
-                      </div>
-                  ))}
-              </div>
+                            <QADisplay reportId={report._id} />
+                        </motion.div>
+                    ))}
+                  </AnimatePresence>
+              </motion.div>
           )}
       </div>
     </div>

@@ -18,6 +18,7 @@ This module uses an **Agent-Worker Hybrid Architecture** isolated from the core 
 *   **Frontend (`apps/clear-climate-os/frontend`)**: React + TypeScript + Vite.
     *   **Rule**: Use `zod` for any client-side schema validation (if needed beyond Convex).
     *   **Rule**: Prefer Tailwind utility classes directly on HTML elements.
+    *   **Rule**: Use `framer-motion` for complex UI micro-interactions, layout transitions (`<motion.div layout>`), and staggered list reveals (`<AnimatePresence>`).
 
 *   **State Management (`apps/clear-climate-os/frontend/convex`)**: Convex.
     *   Used for real-time workflow state (notes, evidence tracking, report drafting, QA flags, theory of change items, and systems thinking variables/links).
