@@ -18,6 +18,17 @@ export const getEvidence = query({
   },
 });
 
+export const getActionItems = query({
+  args: { status: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query("action_items").order("desc");
+    if (args.status) {
+      q = q.filter((q) => q.eq(q.field("status"), args.status));
+    }
+    return await q.collect();
+  },
+});
+
 export const getRisks = query({
   args: { status: v.optional(v.string()) },
   handler: async (ctx, args) => {

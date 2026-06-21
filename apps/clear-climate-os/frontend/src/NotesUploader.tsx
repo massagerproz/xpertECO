@@ -56,10 +56,12 @@ export function NotesUploader() {
     }
   };
 
+  const springConfig = { type: "spring" as const, stiffness: 400, damping: 30 };
+
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="px-6 py-5 border-b border-slate-100 flex items-center space-x-2">
-        <MessageSquarePlus className="w-5 h-5 text-slate-400" />
+    <div className="glass-panel rounded-2xl overflow-hidden">
+      <div className="glass-header px-6 py-5 flex items-center space-x-2">
+        <MessageSquarePlus className="w-5 h-5 text-slate-500" />
         <h2 className="text-lg font-semibold text-slate-800">1. Input Meeting Notes</h2>
       </div>
 
@@ -67,7 +69,7 @@ export function NotesUploader() {
         <div className="mb-4">
           <label className="block text-sm font-medium text-slate-700 mb-1">Source Type</label>
           <select
-            className="w-full sm:w-auto p-2 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-slate-700"
+            className="w-full sm:w-auto p-2.5 border border-white/60 shadow-sm rounded-xl bg-white/50 backdrop-blur focus:bg-white/80 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-700 transition-all"
             value={sourceType}
             onChange={(e) => setSourceType(e.target.value)}
           >
@@ -78,7 +80,7 @@ export function NotesUploader() {
           </select>
         </div>
         <textarea
-          className="w-full p-4 border border-slate-200 rounded-lg mb-4 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none outline-none text-slate-700"
+          className="w-full p-4 border border-white/60 shadow-sm rounded-xl mb-4 bg-white/50 backdrop-blur focus:bg-white/80 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none outline-none text-slate-700 placeholder:text-slate-400"
           rows={5}
           placeholder="Paste meeting notes, activity updates, emails, or transcripts here..."
           value={notes}
@@ -102,20 +104,27 @@ export function NotesUploader() {
         </div>
 
         {savedNotes && savedNotes.length > 0 && (
-           <div className="mt-8 pt-6 border-t border-slate-100">
+           <motion.div layout className="mt-8 pt-6 border-t border-white/40">
               <div className="flex items-center space-x-2 mb-3">
-                <Clock className="w-4 h-4 text-slate-400" />
+                <Clock className="w-4 h-4 text-slate-500" />
                 <h3 className="text-sm font-medium text-slate-600">Recent Inputs</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {savedNotes.slice(0, 3).map(n => (
-                   <div key={n._id} className="p-3 bg-slate-50 border border-slate-100 rounded-lg text-sm text-slate-600 flex flex-col" title={n.content}>
+                {savedNotes.slice(0, 3).map((n, i) => (
+                   <motion.div
+                     initial={{ opacity: 0, y: 10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ ...springConfig, delay: i * 0.1 }}
+                     key={n._id}
+                     className="p-3 bg-white/40 border border-white/60 shadow-sm rounded-xl text-sm text-slate-600 flex flex-col hover:bg-white/60 transition-colors"
+                     title={n.content}
+                   >
                      <span className="text-xs font-semibold text-emerald-700 mb-1 capitalize">{(n.sourceType || 'Note').replace('_', ' ')}</span>
                      <span className="line-clamp-2">{n.content}</span>
-                   </div>
+                   </motion.div>
                 ))}
               </div>
-           </div>
+           </motion.div>
         )}
       </div>
     </div>

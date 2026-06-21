@@ -17,10 +17,12 @@ export function EvidenceReview() {
     await updateStatus({ id, status: "rejected" });
   };
 
+  const springConfig = { type: "spring" as const, stiffness: 400, damping: 30 };
+
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="px-6 py-5 border-b border-slate-100 flex items-center space-x-2">
-        <LayoutList className="w-5 h-5 text-slate-400" />
+    <div className="glass-panel rounded-2xl overflow-hidden">
+      <div className="glass-header px-6 py-5 flex items-center space-x-2">
+        <LayoutList className="w-5 h-5 text-slate-500" />
         <h2 className="text-lg font-semibold text-slate-800">2. Review & Approve Evidence</h2>
       </div>
 
@@ -41,11 +43,12 @@ export function EvidenceReview() {
                 {pendingEvidence.map((ev) => (
                   <motion.li
                     layout
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                    transition={springConfig}
                     key={ev._id}
-                    className="p-4 border border-amber-200 bg-amber-50/50 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-amber-50"
+                    className="p-4 border border-white/80 bg-white/60 backdrop-blur rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-white/80 transition-colors"
                   >
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
@@ -101,20 +104,21 @@ export function EvidenceReview() {
           </div>
           {approvedEvidence === undefined ? (
               <div className="animate-pulse flex space-x-4">
-                <div className="h-10 bg-slate-100 rounded w-full"></div>
+                <div className="h-10 bg-white/50 rounded-xl w-full"></div>
               </div>
           ) : approvedEvidence.length === 0 ? (
               <p className="text-slate-400 italic text-sm">No approved evidence yet.</p>
           ) : (
               <motion.ul layout className="space-y-2">
                 <AnimatePresence>
-                  {approvedEvidence.map(ev => (
+                  {approvedEvidence.map((ev, i) => (
                       <motion.li
                          layout
-                         initial={{ opacity: 0, x: -10 }}
-                         animate={{ opacity: 1, x: 0 }}
+                         initial={{ opacity: 0, x: -10, filter: "blur(4px)" }}
+                         animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                         transition={{ ...springConfig, delay: i * 0.05 }}
                          key={ev._id}
-                         className="p-3 border border-slate-100 rounded-lg bg-slate-50 text-sm flex items-start space-x-3"
+                         className="p-3 border border-white/60 shadow-sm rounded-xl bg-white/70 text-sm flex items-start space-x-3"
                       >
                          <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                          <div>

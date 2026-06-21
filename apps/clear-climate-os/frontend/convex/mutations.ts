@@ -184,6 +184,36 @@ export const updateRiskStatus = mutation({
   },
 });
 
+export const addActionItem = mutation({
+  args: {
+    task: v.string(),
+    owner: v.string(),
+    deadline: v.string(),
+    priority: v.string(),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("action_items", {
+      task: args.task,
+      owner: args.owner,
+      deadline: args.deadline,
+      priority: args.priority,
+      status: args.status,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const updateActionItemStatus = mutation({
+  args: {
+    id: v.id("action_items"),
+    status: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { status: args.status });
+  },
+});
+
 export const addEvidence = mutation({
   args: {
     noteId: v.optional(v.id("notes")),

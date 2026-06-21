@@ -98,11 +98,13 @@ export function ReportGenerator() {
     }
   };
 
+  const springConfig = { type: "spring" as const, stiffness: 400, damping: 30 };
+
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+    <div className="glass-panel rounded-2xl overflow-hidden">
+      <div className="glass-header px-6 py-5 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <FileText className="w-5 h-5 text-slate-400" />
+          <FileText className="w-5 h-5 text-slate-500" />
           <h2 className="text-lg font-semibold text-slate-800">3. Report Draft & QA</h2>
         </div>
         <motion.button
@@ -117,13 +119,13 @@ export function ReportGenerator() {
         </motion.button>
       </div>
 
-      <div className="p-6 bg-slate-50/50">
+      <div className="p-6">
           {reports === undefined ? (
               <div className="animate-pulse flex space-x-4">
-                <div className="h-32 bg-slate-100 rounded w-full"></div>
+                <div className="h-32 bg-white/50 backdrop-blur rounded-xl w-full"></div>
               </div>
           ) : reports.length === 0 ? (
-              <div className="py-8 text-center border-2 border-dashed border-slate-200 rounded-xl">
+              <div className="py-8 text-center bg-white/40 border-2 border-dashed border-white/60 rounded-xl">
                 <FileText className="w-8 h-8 text-slate-300 mx-auto mb-3" />
                 <p className="text-slate-500">No reports generated yet.</p>
                 <p className="text-slate-400 text-sm mt-1">Approve evidence above and click Generate.</p>
@@ -131,20 +133,21 @@ export function ReportGenerator() {
           ) : (
               <motion.div layout className="space-y-6">
                   <AnimatePresence>
-                    {reports.map((report) => (
+                    {reports.map((report, i) => (
                         <motion.div
                             layout
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
+                            initial={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                            transition={{ ...springConfig, delay: i * 0.05 }}
                             key={report._id}
-                            className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm transition-all hover:shadow-md"
+                            className="bg-white/80 backdrop-blur border border-white p-6 rounded-xl shadow-sm transition-all hover:shadow-md"
                         >
                             <h4 className="font-bold text-xl text-slate-800 mb-3">{report.title}</h4>
                             <div className="prose prose-slate prose-sm max-w-none mb-6 text-slate-600">
                                <p>{report.body}</p>
                             </div>
 
-                            <div className="pt-4 border-t border-slate-100 flex flex-wrap gap-3">
+                            <div className="pt-4 border-t border-white/60 flex flex-wrap gap-3">
                                 <motion.button
                                     whileHover={!isReviewing ? { scale: 1.05 } : {}}
                                     whileTap={!isReviewing ? { scale: 0.95 } : {}}

@@ -16,6 +16,8 @@ export function ResourceTracker() {
   const pendingResources = resources.filter((r) => r.status === "pending");
   const approvedResources = resources.filter((r) => r.status === "approved");
 
+  const springConfig = { type: "spring" as const, stiffness: 400, damping: 30 };
+
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
@@ -44,8 +46,8 @@ export function ResourceTracker() {
   };
 
   return (
-    <section className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="border-b border-slate-200 bg-slate-50/50 p-6 flex justify-between items-center">
+    <section className="glass-panel rounded-2xl overflow-hidden">
+      <div className="glass-header p-6 flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
             <Wallet className="w-5 h-5 text-teal-500" />
@@ -76,14 +78,15 @@ export function ResourceTracker() {
             </h3>
             <motion.div layout className="space-y-3">
               <AnimatePresence>
-                {pendingResources.map((r) => (
+                {pendingResources.map((r, i) => (
                   <motion.div
                     layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, x: -20, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                    transition={{ ...springConfig, delay: i * 0.05 }}
                     key={r._id}
-                    className="p-4 bg-amber-50 border border-amber-100 rounded-lg flex justify-between items-start"
+                    className="p-4 bg-white/60 backdrop-blur border border-white shadow-sm rounded-xl flex justify-between items-start"
                   >
                     <div>
                       <div className="flex items-center gap-2 mb-1">
@@ -125,13 +128,14 @@ export function ResourceTracker() {
           ) : (
             <motion.div layout className="grid gap-3">
               <AnimatePresence>
-                {approvedResources.map((r) => (
+                {approvedResources.map((r, i) => (
                   <motion.div
                     layout
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
+                    transition={{ ...springConfig, delay: i * 0.05 }}
                     key={r._id}
-                    className="p-4 border border-slate-100 rounded-lg bg-white"
+                    className="p-4 bg-white/80 border border-white shadow-sm rounded-xl"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <p className="font-medium text-slate-800">{r.name}</p>

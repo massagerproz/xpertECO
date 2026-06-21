@@ -100,6 +100,15 @@ class RiskItem(BaseModel):
 class RiskDraft(BaseModel):
     risks: List[RiskItem]
 
+class ActionItem(BaseModel):
+    task: str
+    owner: str
+    deadline: str
+    priority: str # 'high', 'medium', 'low'
+
+class ActionItemDraft(BaseModel):
+    actions: List[ActionItem]
+
 @app.post("/extract_evidence", response_model=List[ExtractedEvidence])
 async def extract_evidence(payload: NotesPayload):
     if not payload.notes:
@@ -329,6 +338,33 @@ async def generate_risks(payload: NotesPayload):
         risks=[
             RiskItem(name="Supply Chain Delay", impact="high", likelihood="high", mitigation="Diversify battery suppliers immediately."),
             RiskItem(name="Community Opposition", impact="medium", likelihood="low", mitigation="Hold town hall meetings to address concerns transparently.")
+        ]
+    )
+
+@app.post("/generate_action_items", response_model=ActionItemDraft)
+async def generate_action_items(payload: NotesPayload):
+    if not payload.notes:
+        raise HTTPException(status_code=400, detail="Notes cannot be empty")
+
+    if os.getenv("OPENAI_API_KEY"):
+        try:
+            completion = await client.beta.chat.completions.parse(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant mapping project action items. Extract explicit tasks, assign an owner if implied (or 'Unassigned'), identify deadlines, and categorize priority ('high', 'medium', 'low')."},
+                    {"role": "user", "content": f"Context:\n{payload.notes}"}
+                ],
+                response_format=ActionItemDraft,
+            )
+            return completion.choices[0].message.parsed
+        except Exception as e:
+            print(f"OpenAI Action Items generation failed: {e}")
+            # Fall through to mock logic on error
+
+    return ActionItemDraft(
+        actions=[
+            ActionItem(task="Finalize budget approval", owner="Finance Team", deadline="Next Friday", priority="high"),
+            ActionItem(task="Schedule community outreach", owner="PR Manager", deadline="End of month", priority="medium")
         ]
     )
 

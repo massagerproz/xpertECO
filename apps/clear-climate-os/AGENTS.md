@@ -19,9 +19,10 @@ This module uses an **Agent-Worker Hybrid Architecture** isolated from the core 
     *   **Rule**: Use `zod` for any client-side schema validation (if needed beyond Convex).
     *   **Rule**: Prefer Tailwind utility classes directly on HTML elements.
     *   **Rule**: Use `framer-motion` for complex UI micro-interactions, layout transitions (`<motion.div layout>`), and staggered list reveals (`<AnimatePresence>`).
+    *   **Rule**: The UI implements a Glassmorphism rendering pipeline. Use `.glass-panel` and `.glass-header` utility classes (defined in `index.css`) rather than solid background colors where possible.
 
 *   **State Management (`apps/clear-climate-os/frontend/convex`)**: Convex.
-    *   Used for real-time workflow state (notes, evidence tracking, report drafting, QA flags, theory of change items, and systems thinking variables/links).
+    *   Used for real-time workflow state (notes, evidence tracking, report drafting, QA flags, theory of change items, systems thinking variables/links, stakeholders, resources, risks, and action items).
     *   **Rule**: Human approval is strictly required before extracted evidence is fully committed to the tracker.
     *   **Rule**: Always define strong `v.*` schemas for tables.
     *   **Rule**: Note schemas use `sourceType` (e.g., `meeting_note`, `activity_update`, `stakeholder_input`, `field_report`).
@@ -35,6 +36,10 @@ This module uses an **Agent-Worker Hybrid Architecture** isolated from the core 
 - **Stakeholder Mapping**: Extract key project stakeholders, their roles, and classify their influence and interest (high, medium, low).
 - **Resource Tracker**: Identify financial, human, and material resource needs and their statuses (secured, needed, at risk) from context.
 - **Risk Assessment**: Map identified project risks, classify impact and likelihood, and provide actionable mitigation strategies.
+- **Action Items**: Extract actionable tasks, map responsible owners, define strict deadlines, and assign prioritization levels (high, medium, low).
+
+## Deployment & Routing
+- When deploying to **Vercel** or any SPA host, ensure the `vercel.json` contains routing fallback rules (`"source": "/(.*)", "destination": "/index.html"`) so that direct links to routes do not return 404s.
 
 ## Testing Requirements
 *   **Backend**: Execute `pytest test_main.py` in the backend directory to verify endpoint logic.

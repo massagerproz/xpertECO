@@ -19,6 +19,8 @@ export function SystemsThinking() {
   const pendingVariables = variables.filter((v) => v.status === "pending");
   const approvedVariables = variables.filter((v) => v.status === "approved");
 
+  const springConfig = { type: "spring" as const, stiffness: 400, damping: 30 };
+
   const pendingLinks = links.filter((l) => l.status === "pending");
   const approvedLinks = links.filter((l) => l.status === "approved");
 
@@ -58,8 +60,8 @@ export function SystemsThinking() {
   };
 
   return (
-    <section className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="border-b border-slate-200 bg-slate-50/50 p-6 flex justify-between items-center">
+    <section className="glass-panel rounded-2xl overflow-hidden">
+      <div className="glass-header p-6 flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
             <Workflow className="w-5 h-5 text-fuchsia-500" />
@@ -90,14 +92,15 @@ export function SystemsThinking() {
             </h3>
             <motion.div layout className="space-y-4">
               <AnimatePresence>
-                {pendingVariables.map((v) => (
+                {pendingVariables.map((v, i) => (
                   <motion.div
                     layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, x: -20, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                    transition={{ ...springConfig, delay: i * 0.05 }}
                     key={v._id}
-                    className="p-4 bg-amber-50 border border-amber-100 rounded-lg flex justify-between items-start"
+                    className="p-4 bg-white/60 backdrop-blur border border-white shadow-sm rounded-xl flex justify-between items-start"
                   >
                     <div>
                       <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 mb-2">
@@ -117,14 +120,15 @@ export function SystemsThinking() {
                   </motion.div>
                 ))}
 
-                {pendingLinks.map((l) => (
+                {pendingLinks.map((l, i) => (
                   <motion.div
                     layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, x: -20, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                    transition={{ ...springConfig, delay: i * 0.05 + 0.2 }}
                     key={l._id}
-                    className="p-4 bg-amber-50 border border-amber-100 rounded-lg flex justify-between items-start"
+                    className="p-4 bg-white/60 backdrop-blur border border-white shadow-sm rounded-xl flex justify-between items-start"
                   >
                     <div>
                       <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 mb-2">
@@ -164,13 +168,14 @@ export function SystemsThinking() {
                 <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Variables</h4>
                 <motion.div layout className="grid gap-2 grid-cols-1 md:grid-cols-2">
                   <AnimatePresence>
-                    {approvedVariables.map((v) => (
+                    {approvedVariables.map((v, i) => (
                       <motion.div
                         layout
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
+                        transition={{ ...springConfig, delay: i * 0.05 }}
                         key={v._id}
-                        className="p-3 border border-slate-200 rounded-lg bg-white"
+                        className="p-3 bg-white/80 border border-white shadow-sm rounded-xl"
                       >
                         <p className="font-medium text-sm text-slate-800">{v.name}</p>
                         <p className="text-xs text-slate-500 mt-1">{v.description}</p>
@@ -185,13 +190,14 @@ export function SystemsThinking() {
                   <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Causal Links</h4>
                   <motion.div layout className="grid gap-2">
                     <AnimatePresence>
-                      {approvedLinks.map((l) => (
+                      {approvedLinks.map((l, i) => (
                         <motion.div
                           layout
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
+                          transition={{ ...springConfig, delay: i * 0.05 + 0.2 }}
                           key={l._id}
-                          className="p-3 border border-slate-200 rounded-lg bg-white flex items-center gap-4"
+                          className="p-3 bg-white/80 border border-white shadow-sm rounded-xl flex items-center gap-4"
                         >
                           <div className="flex items-center gap-2 min-w-[200px]">
                             <span className="font-medium text-sm text-slate-700">{l.source}</span>

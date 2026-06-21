@@ -8,6 +8,7 @@ import { SystemsThinking } from "./SystemsThinking";
 import { StakeholderMapping } from "./StakeholderMapping";
 import { ResourceTracker } from "./ResourceTracker";
 import { RiskAssessment } from "./RiskAssessment";
+import { ActionItemsTracker } from "./ActionItemsTracker";
 import { ReportGenerator } from "./ReportGenerator";
 import { motion } from "framer-motion";
 
@@ -16,8 +17,8 @@ const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
 function AppContent() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <div className="min-h-screen">
+      <header className="glass-panel sticky top-0 z-10 rounded-none border-t-0 border-x-0">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center space-x-3">
           <div className="p-2 bg-emerald-100 rounded-lg">
             <Leaf className="w-6 h-6 text-emerald-600" />
@@ -43,6 +44,7 @@ function AppContent() {
           <StakeholderMapping />
           <ResourceTracker />
           <RiskAssessment />
+          <ActionItemsTracker />
         </div>
         <ReportGenerator />
       </motion.main>

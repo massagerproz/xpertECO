@@ -42,9 +42,10 @@ The **CLEAR Climate Copilot** (also known as CLEAR Climate OS) is an isolated ap
 
 ### Architecture
 
-- **Backend (`apps/clear-climate-os/backend`)**: Built with Python and FastAPI. It exposes endpoints for AI-driven extraction of evidence from notes, generating report drafts from approved evidence, generating Theory of Change, Systems Thinking mappings, Stakeholder Maps, Resource Tracking items, Risk Assessment mappings, and performing QA reviews. Uses Pydantic for validation.
-- **Frontend (`apps/clear-climate-os/frontend`)**: Built with React (TypeScript), Vite, TailwindCSS, and Framer Motion. It provides the user interface for inputting notes, reviewing and approving extracted evidence, viewing Theory of Change mapping, Systems Thinking links, Stakeholders, Resource Tracking, Risk Assessments, and generating QA-checked reports. Leverages Framer Motion for smooth micro-interactions and layout transitions.
-- **State Management**: Uses [Convex](https://convex.dev/) for real-time state synchronization, handling `notes`, `evidence`, `reports`, `qa_reviews`, `theory_of_change`, `systems_thinking_variables`, `systems_thinking_links`, `stakeholders`, `resources`, and `risks`.
+- **Backend (`apps/clear-climate-os/backend`)**: Built with Python and FastAPI. It exposes endpoints for AI-driven extraction of evidence from notes, generating report drafts from approved evidence, generating Theory of Change, Systems Thinking mappings, Stakeholder Maps, Resource Tracking items, Risk Assessment mappings, Action Item extraction, and performing QA reviews. Uses Pydantic for validation.
+- **Frontend (`apps/clear-climate-os/frontend`)**: Built with React (TypeScript), Vite, TailwindCSS, and Framer Motion. It provides the user interface for inputting notes, reviewing and approving extracted evidence, viewing Theory of Change mapping, Systems Thinking links, Stakeholders, Resource Tracking, Risk Assessments, Action Items, and generating QA-checked reports. Leverages Framer Motion along with custom CSS configurations to present a highly polished Glassmorphism interface.
+- **State Management**: Uses [Convex](https://convex.dev/) for real-time state synchronization, handling `notes`, `evidence`, `reports`, `qa_reviews`, `theory_of_change`, `systems_thinking_variables`, `systems_thinking_links`, `stakeholders`, `resources`, `risks`, and `action_items`.
+- **Deployment**: Configured out of the box with `vercel.json` SPA rewrite rules resolving standard 404 client-side routing issues.
 
 ### How to Run
 

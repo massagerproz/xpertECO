@@ -17,4 +17,7 @@ test('has components', async ({ page }) => {
 
   // Verify Risk Assessment is present
   await expect(page.locator('text=Risk Assessment')).toBeVisible();
+
+  // Verify Action Items is present
+  await expect(page.locator('text=Action Items').first()).toBeVisible();
 });

@@ -74,4 +74,12 @@ export default defineSchema({
     status: v.string(),
     createdAt: v.number(),
   }),
+  action_items: defineTable({
+    task: v.string(),
+    owner: v.string(),
+    deadline: v.string(),
+    priority: v.string(),
+    status: v.string(),
+    createdAt: v.number(),
+  }),
 });

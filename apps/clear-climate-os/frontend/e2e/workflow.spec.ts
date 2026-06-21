@@ -105,6 +105,20 @@ test.describe('CLEAR Climate OS Core Workflow', () => {
     }
     await page.waitForTimeout(2000); // Hold before moving to next feature
 
+    // New Step: Action Items
+    const generateActionItemsBtn = page.getByRole('button', { name: 'Extract Tasks' });
+    await expect(generateActionItemsBtn).toBeEnabled();
+    await generateActionItemsBtn.click({force: true});
+
+    await page.waitForTimeout(2000);
+    let pendingActionsCount = await page.locator('button > svg.lucide-check').count();
+    while (pendingActionsCount > 0) {
+        await page.locator('button > svg.lucide-check').first().click({ force: true });
+        await page.waitForTimeout(1000);
+        pendingActionsCount = await page.locator('button > svg.lucide-check').count();
+    }
+    await page.waitForTimeout(2000); // Hold before moving to next feature
+
     // 3. Generate Report
     const generateBtn = page.getByRole('button', { name: 'Generate Report' });
     await expect(generateBtn).toBeEnabled();

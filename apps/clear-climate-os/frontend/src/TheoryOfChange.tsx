@@ -15,6 +15,8 @@ export function TheoryOfChange() {
   const pendingItems = tocItems.filter((i) => i.status === "pending");
   const approvedItems = tocItems.filter((i) => i.status === "approved");
 
+  const springConfig = { type: "spring" as const, stiffness: 400, damping: 30 };
+
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
@@ -41,8 +43,8 @@ export function TheoryOfChange() {
   };
 
   return (
-    <section className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="border-b border-slate-200 bg-slate-50/50 p-6 flex justify-between items-center">
+    <section className="glass-panel rounded-2xl overflow-hidden">
+      <div className="glass-header p-6 flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
             <Network className="w-5 h-5 text-indigo-500" />
@@ -73,14 +75,15 @@ export function TheoryOfChange() {
             </h3>
             <motion.div layout className="space-y-3">
               <AnimatePresence>
-                {pendingItems.map((item) => (
+                {pendingItems.map((item, i) => (
                   <motion.div
                     layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, x: -20, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                    transition={{ ...springConfig, delay: i * 0.05 }}
                     key={item._id}
-                    className="p-4 bg-amber-50 border border-amber-100 rounded-lg flex justify-between items-start"
+                    className="p-4 bg-white/60 backdrop-blur border border-white shadow-sm rounded-xl flex justify-between items-start"
                   >
                     <div>
                       <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 mb-2">
@@ -126,13 +129,14 @@ export function TheoryOfChange() {
           ) : (
             <motion.div layout className="grid gap-3">
               <AnimatePresence>
-                {approvedItems.map((item) => (
+                {approvedItems.map((item, i) => (
                   <motion.div
                     layout
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
+                    transition={{ ...springConfig, delay: i * 0.05 }}
                     key={item._id}
-                    className="p-4 border border-slate-100 rounded-lg bg-white flex items-start gap-4"
+                    className="p-4 bg-white/80 border border-white shadow-sm rounded-xl flex items-start gap-4"
                   >
                     <div className="mt-0.5">
                       <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-slate-100 text-slate-600">

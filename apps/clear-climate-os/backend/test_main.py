@@ -99,3 +99,15 @@ def test_generate_risks():
 def test_generate_risks_empty():
     response = client.post("/generate_risks", json={"notes": ""})
     assert response.status_code == 400
+
+def test_generate_action_items():
+    response = client.post("/generate_action_items", json={"notes": "We need to finish the budget by tomorrow."})
+    assert response.status_code == 200
+    data = response.json()
+    assert "actions" in data
+    assert isinstance(data["actions"], list)
+    assert len(data["actions"]) > 0
+
+def test_generate_action_items_empty():
+    response = client.post("/generate_action_items", json={"notes": ""})
+    assert response.status_code == 400
